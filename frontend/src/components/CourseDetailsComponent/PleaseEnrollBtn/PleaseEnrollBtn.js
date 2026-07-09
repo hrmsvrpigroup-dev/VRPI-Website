@@ -31,7 +31,7 @@ const PleaseEnrollBtn = ({
     useHttpsAxios();
 
   useEffect(() => {
-    if (FetchUserData.userData && FetchUserData.userData.courseList) {
+    if (FetchUserData.userData && FetchUserData.userData?.courseList) {
       const courseList = FetchUserData.userData.courseList;
       const hasCourseId = courseList.some((course) => {
         // console.log(
@@ -48,37 +48,29 @@ const PleaseEnrollBtn = ({
         setEnrolled(hasCourseId);
       }
     }
-  }, [FetchUserData.userData.courseList]);
+  }, [FetchUserData.userData?.courseList, FetchUserData.userData, courseCode]);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (statusCode === 200 || statusCode === 201) {
       window.location.href = responseData;
-    } else if (statusCode < 0 && statusCode > 202) {
-      dispatch(
-        setMessage(
-          responseData.response.data.statusMessage
-            ? responseData.response.data.statusMessage
-            : responseData.response.data.errorMessage,
-          "error",
-          false,
-          4
-        )
-      );
+    } else if (error) {
+      const errMsg =
+        error?.response?.data?.statusMessage ||
+        error?.response?.data?.errorMessage ||
+        error?.message ||
+        "An error occurred";
+      dispatch(setMessage(errMsg, "error", false, 4));
+    } else if (responseData && statusCode && statusCode > 202) {
+      const errMsg =
+        responseData?.response?.data?.statusMessage ||
+        responseData?.response?.data?.errorMessage ||
+        responseData?.message ||
+        "An error occurred";
+      dispatch(setMessage(errMsg, "error", false, 4));
     }
-
-    if (error) {
-      setMessage(
-        responseData.response.data.statusMessage
-          ? responseData.response.data.statusMessage
-          : responseData.response.data.errorMessage,
-        "error",
-        false,
-        4
-      );
-    }
-  }, [responseData]);
+  }, [responseData, dispatch, error, statusCode]);
 
   const NotLoginStateHandler = () => {
     setConfirmationMessage(
@@ -112,16 +104,16 @@ const PleaseEnrollBtn = ({
       return;
     }
 
-    if (!FetchUserData.userData.user) {
+    if (!FetchUserData.userData?.user) {
       return;
     }
 
-    if (!FetchUserData.userData.educationalDetails) {
+    if (!FetchUserData.userData?.educationalDetails) {
       NotSubmittedEducationalDetailsHandler();
       return;
     }
 
-    if (FetchUserData.userData.certificatesToUpload !== 0) {
+    if (FetchUserData.userData?.certificatesToUpload !== 0) {
       NotSubmittedMandatoryCertificatesHandler();
       return;
     }
@@ -138,9 +130,9 @@ const PleaseEnrollBtn = ({
   const handleConfirm = () => {
     if (!isVRPIUserLoggedIn) {
       navigate("/login");
-    } else if (!FetchUserData.userData.educationalDetails) {
+    } else if (!FetchUserData.userData?.educationalDetails) {
       navigate("/educationalDetails");
-    } else if (FetchUserData.userData.certificatesToUpload !== 0) {
+    } else if (FetchUserData.userData?.certificatesToUpload !== 0) {
       navigate("/mandatoryCertificates");
     } else {
       EnrollToTheCourse();

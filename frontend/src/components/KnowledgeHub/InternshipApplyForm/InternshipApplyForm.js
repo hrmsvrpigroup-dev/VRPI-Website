@@ -103,10 +103,10 @@ const InternshipApplyForm = ({ internship, onClose }) => {
       message: message,
     };
 
-    // Google Apps Script or Local Express Backend URL
+    // Google Apps Script URL
     const backendUrl =
       process.env.REACT_APP_INTERNSHIP_BACKEND_URL ||
-      "http://localhost:8080/api/apply-internship";
+      "https://script.google.com/macros/s/AKfycbyOynQATS0DYYpmFfrWhcphMR84FM4Nl9rS-ubT8k-0OX5ia734axcBOjrBkGznYGF7cA/exec";
 
     const isGoogleScript = backendUrl.includes("script.google.com");
 

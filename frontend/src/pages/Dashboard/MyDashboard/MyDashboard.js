@@ -15,7 +15,7 @@ const MyDashboard = () => {
   const userData = UserDataComponent();
 
   useEffect(() => {
-    if (userData.userData.user) {
+    if (userData.userData?.user) {
       document.title = `${userData.userData.user.firstName} - Dashboard`;
     }
 
@@ -26,7 +26,7 @@ const MyDashboard = () => {
     return () => clearTimeout(timer);
   }, [userData.userData]);
 
-  if (userData.isLoading && userData.userData.user) {
+  if (userData.isLoading && userData.userData?.user) {
     return (
       <div className={style.loadingState}>
         <CircularProgress />
@@ -47,7 +47,7 @@ const MyDashboard = () => {
   } else {
     return (
       <div className={style.container}>
-        <WelcomeScreen user={userData.userData.user} onClose={hideWelcome} />
+        <WelcomeScreen user={userData.userData?.user} onClose={hideWelcome} />
         <div className={style.containers}>
           {userData.userData && (
             <div className={style.mainContainer}>

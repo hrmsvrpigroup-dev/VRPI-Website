@@ -115,34 +115,30 @@ const PersonalDataForm = ({ role }) => {
     useHttpsAxios();
 
   useEffect(() => {
-    const Validation = () => {
-      if (responseData) {
-        if (statusCode === 200 || statusCode === 201) {
-          // console.log("Created user successfully");
-          dispatch(setUser({ role: role, step: 2 }));
-        } else {
-          // console.log(statusCode);
-          // console.error("error: " + error);
-          // console.error("error: " + responseData);
-
-          dispatch(
-            setMessage(
-              responseData.response.data.statusMessage
-                ? responseData.response.data.statusMessage
-                : responseData.response.data.errorMessage,
-              "error"
-            )
-          );
-        }
-      }
-    };
     if (error) {
-      dispatch(setMessage(error, "error"));
-      // console.log(error);
+      const errMsg =
+        error?.response?.data?.message ||
+        error?.response?.data?.errorMessage ||
+        error?.message ||
+        "An error occurred";
+      dispatch(setMessage(errMsg, "error"));
+      return;
     }
 
-    Validation();
-  }, [error, responseData]);
+    if (responseData) {
+      if (statusCode === 200 || statusCode === 201) {
+        // console.log("Created user successfully");
+        dispatch(setUser({ role: role, step: 2, email: emailInput.value }));
+      } else {
+        const errMsg =
+          responseData?.response?.data?.message ||
+          responseData?.response?.data?.errorMessage ||
+          responseData?.message ||
+          "An error occurred during registration";
+        dispatch(setMessage(errMsg, "error"));
+      }
+    }
+  }, [error, responseData, statusCode, dispatch, role]);
 
   const handleSubmit = async () => {
     let formData;

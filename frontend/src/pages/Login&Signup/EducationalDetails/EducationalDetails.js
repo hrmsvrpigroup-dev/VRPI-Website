@@ -25,7 +25,7 @@ const EducationalDetails = () => {
         <div className={styles.loadingContainer}>
           <CircularProgress />
         </div>
-      ) : FetchUserData.userData.educationalDetails ? (
+      ) : FetchUserData.userData?.educationalDetails ? (
         <ErrorPage errorData={PageNotFoundErrorData} />
       ) : (
         <SignUpOrLoginContainer screenData={EducationalScreenData}>

@@ -23,8 +23,8 @@ const ProfilePic = ({
   const [Submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
-    if (FetchUserData.userData.user) {
-      setSubmitted(FetchUserData.userData.user.profilePic !== null);
+    if (FetchUserData.userData?.user) {
+      setSubmitted(FetchUserData.userData?.user.profilePic !== null);
     }
   }, [FetchUserData.userData]);
 

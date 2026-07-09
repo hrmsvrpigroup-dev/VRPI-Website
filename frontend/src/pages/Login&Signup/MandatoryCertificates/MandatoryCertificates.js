@@ -36,7 +36,7 @@ const MandatoryCertificates = () => {
         <div className={styles.loadingContainer}>
           <CircularProgress />
         </div>
-      ) : FetchUserData.userData.uploadedCertificates === 4 ? (
+      ) : FetchUserData.userData?.uploadedCertificates === 4 ? (
         <ErrorPage errorData={PageNotFoundErrorData} />
       ) : (
         <div style={{ display: "flex" }}>

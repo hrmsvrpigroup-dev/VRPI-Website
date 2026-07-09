@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import axios from "axios"; // Import Axios
 import { CircularProgress } from "@material-ui/core";
 import styles from "./VerifyPayments.module.css";
@@ -8,7 +8,6 @@ import Button from "../../../UI/Button/Button";
 import { url } from "../../../constants";
 import UserDataComponent from "../../../data/user";
 import ErrorPage from "../../Error";
-import { GeneralErrorData } from "../../../data/ErrorData";
 const VerifyPayment = () => {
   const queryParams = new URLSearchParams(window.location.search);
   const location = useLocation();
@@ -39,7 +38,7 @@ const VerifyPayment = () => {
 
   const FetchUserData = UserDataComponent();
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       setIsLoading(true);
       const response = await axios.get(`${url.backendBaseUrl}${pathname}`, {
@@ -66,12 +65,23 @@ const VerifyPayment = () => {
       setError(error);
       setIsLoading(false);
     }
-  };
+  }, [
+    amount,
+    courseId,
+    orderId,
+    pathname,
+    razorpayPaymentId,
+    razorpayPaymentLinkId,
+    razorpayPaymentLinkReferenceId,
+    razorpayPaymentLinkStatus,
+    razorpaySignature,
+    userId,
+  ]);
 
   useEffect(() => {
     console.log("run");
-    if (FetchUserData?.userData.courseList && !FetchUserData?.isLoading) {
-      const findCourse = FetchUserData.userData.courseList.find(
+    if (FetchUserData?.userData?.courseList && !FetchUserData?.isLoading) {
+      const findCourse = FetchUserData.userData?.courseList.find(
         (course) => course.id.toString() === courseId.toString()
       );
       console.log("run1");
@@ -92,7 +102,15 @@ const VerifyPayment = () => {
         }
       }
     }
-  }, [FetchUserData.userData.courseList]);
+  }, [
+    FetchUserData.userData?.courseList,
+    FetchUserData?.isLoading,
+    FetchUserData.error,
+    courseId,
+    paymentVerificationStatus,
+    verified,
+    fetchData,
+  ]);
 
   const successfulRequest = {
     image: "paymentSuccessfulImage.png",

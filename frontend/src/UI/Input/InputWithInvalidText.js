@@ -39,6 +39,7 @@ const InputWithInvalidText = ({
             ? "text"
             : inputFields.type
         }`}
+        autoComplete={inputFields.autoComplete}
       />
       {inputFields.type === "password" && (
         <img

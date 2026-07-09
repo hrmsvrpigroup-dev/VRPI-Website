@@ -14,14 +14,11 @@ import {
 import Footer from "../components/Layout/Footer/Footer";
 import JoinUs from "../components/JoinUs/JoinUs";
 import ComingSoon from "../UI/ComingSoon/ComingSoon";
-import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../UI/Popup/Message";
 import { clearMessage } from "../store/MessageDisplay/MessageActions";
 
 const hideHeaderRoutes = [
-  "/login",
-  "/signup",
   "/educationalDetails",
   "/educationaldetails",
   "/companydetails",
@@ -37,7 +34,7 @@ const hideHeaderRoutes = [
 const RootLayout = () => {
   const location = useLocation();
   const { email, otp } = useParams();
-  const { isVRPIUserLoggedIn, userId } = useSelector((state) => state.login);
+  const { isVRPIUserLoggedIn } = useSelector((state) => state.login);
 
   const { message, type, dontClose, time } = useSelector(
     (state) => state.message

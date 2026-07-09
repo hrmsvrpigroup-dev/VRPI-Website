@@ -41,12 +41,12 @@ const CourseContent = ({
   const FetchUserData = UserDataComponent();
 
   useEffect(() => {
-    if (FetchUserData.userData.user) {
+    if (FetchUserData.userData?.user) {
       // console.log("userData", FetchUserData.userData.enrolledCourses);
-      if (FetchUserData.userData.courseList <= 0) {
+      if (FetchUserData.userData?.courseList <= 0) {
         setEnrolled(false);
       } else if (
-        FetchUserData.userData.courseList.find((course) => {
+        FetchUserData.userData?.courseList.find((course) => {
           return course.id.toString() === courId.toString();
         })
       ) {
@@ -54,7 +54,6 @@ const CourseContent = ({
       }
     }
 
-    console.log(enrolled);
   }, [FetchUserData, courId]);
 
   return (

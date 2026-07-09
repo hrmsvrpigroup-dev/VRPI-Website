@@ -8,6 +8,10 @@ import style from "./ForgetPassword.module.css";
 import { url } from "../../../../constants";
 import useHttpsAxios from "../../../../hooks/use-httpsAxios";
 import { CircularProgress } from "@material-ui/core";
+import { useDispatch } from "react-redux";
+import { setMessage } from "../../../../store/MessageDisplay/MessageActions";
+import { useNavigate } from "react-router-dom";
+
 const ForgetPassword = () => {
   const loginScreenData = {
     title: "Welcome Back!",
@@ -22,36 +26,38 @@ const ForgetPassword = () => {
     document.title = "Forget Password";
   });
 
-  const { sendRequest, isLoading, statusCode } = useHttpsAxios();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { sendRequest, isLoading, statusCode, error, responseData } = useHttpsAxios();
 
   const SuccessResponseHandler = () => {
-    // dispatch(setMessage("Uploaded your Certificates Successfully", "success"));
-    // setTimeout(() => {
-    //   navigate("/dashboard");
-    // }, [1500]);
+    dispatch(setMessage("Password reset link sent to your email", "success", false, 3));
+    setTimeout(() => {
+      navigate("/login");
+    }, 1500);
   };
 
   useEffect(() => {
-    if (emailInput.isValid && (statusCode === 200 || statusCode === 201)) {
-      // console.log(responseData);
+    if (statusCode === 200 || statusCode === 201) {
       SuccessResponseHandler();
-    } else if (statusCode < 0 && statusCode > 202) {
-      // console.log(error);
-      // console.log(responseData);
+    } else if (error || (responseData && statusCode && statusCode >= 400)) {
+      const errMsg =
+        error?.response?.data?.message ||
+        responseData?.message ||
+        "An error occurred. Please try again.";
+      dispatch(setMessage(errMsg, "error"));
     }
-  });
+  }, [statusCode, error, responseData, dispatch, navigate]);
 
   const handleSubmit = () => {
     if (emailInput.isValid) {
       const formData = {
         email: emailInput.value,
       };
-      // console.log(formData);
-      // SuccessResponseHandler();
       sendRequest({
         url: `${url.backendBaseUrl}/vrpi-user/forgot-password`,
         method: "POST",
-        data: formData,
+        body: formData,
       });
     }
   };

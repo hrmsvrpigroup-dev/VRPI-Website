@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
+import ErrorBoundary from "./ErrorBoundary";
 import store from "./store/store";
 
 // Clean up any corrupt userId stored in localStorage from previous crashes
@@ -16,9 +17,11 @@ if (savedUserId === "[object Object]" || (savedUserId && savedUserId.trim().star
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <ErrorBoundary>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </ErrorBoundary>
   </React.StrictMode>
 );
 

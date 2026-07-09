@@ -13,6 +13,7 @@ const CustomInput = React.forwardRef(
       onBlur,
       onFocus,
       mandatory, // Add a prop to indicate if the input is mandatory
+      autoComplete,
     },
     ref
   ) => {
@@ -36,6 +37,7 @@ const CustomInput = React.forwardRef(
           style={style} // Don't wrap style in another object
           onFocus={onFocus}
           onBlur={onBlur}
+          autoComplete={autoComplete}
         />
       </>
     );

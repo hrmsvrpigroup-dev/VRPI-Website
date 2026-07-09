@@ -454,7 +454,7 @@ function App() {
     },
 
     {
-      path: "/resetPassword/:email/:password",
+      path: "/resetPassword/:email/:otp",
       element: <CreateNewPassword />,
       errorElement: <ErrorPage errorData={GeneralErrorData} />,
     },

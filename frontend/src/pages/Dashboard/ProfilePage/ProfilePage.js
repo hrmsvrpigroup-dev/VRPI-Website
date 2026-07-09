@@ -1,4 +1,3 @@
-import { useSelector } from "react-redux";
 import ProfileBanner from "../../../components/Dashboard/ProfileComponents/ProfileBanner/ProfileBanner";
 import ProfileDetailsSection from "../../../components/Dashboard/ProfileComponents/ProfileDetailsSection/ProfileDetailsSection";
 import UserDataComponent from "../../../data/user";
@@ -13,7 +12,7 @@ const ProfilePage = () => {
   const FetchUserData = UserDataComponent();
 
   useEffect(() => {
-    if (FetchUserData.userData.user) {
+    if (FetchUserData.userData?.user) {
       document.title = `${FetchUserData.userData.user.firstName} - Profile Page`;
     }
   });
@@ -25,7 +24,7 @@ const ProfilePage = () => {
         </div>
       ) : (
         <div>
-          <ProfileBanner user={FetchUserData.userData.user} />
+          <ProfileBanner user={FetchUserData.userData?.user} />
           <ProfileDetailsSection user={FetchUserData.userData} />
         </div>
       )}

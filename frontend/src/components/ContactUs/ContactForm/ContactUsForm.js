@@ -11,7 +11,6 @@ import {
   mobileNumberValidation,
 } from "../../InputValidations/InputValidations";
 import useHttpsAxios from "../../../hooks/use-httpsAxios";
-import { url } from "../../../constants";
 
 const ContactUsForm = () => {
   const [errorMessage, setErrorMessage] = useState("");
@@ -53,28 +52,44 @@ const ContactUsForm = () => {
     descriptionInput.isValid,
   ]);
 
-  const { sendRequest, error, statusCode, responseData, isLoading } =
+  const { error, statusCode, responseData, isLoading } =
     useHttpsAxios();
 
   useEffect(() => {
     const Validation = () => {
-      if (responseData) {
-        if (statusCode === 200 || statusCode === 201) {
-          setErrorMessage("");
-          nameInput.reset();
-          mobileInput.reset();
-          descriptionInput.reset();
-          emailInput.reset();
-          // console.log("data->", responseData);
-        } else {
-          // console.log("error->", error);
-          setErrorMessage(responseData.response.data.statusMessage);
-        }
+      if (statusCode === 200 || statusCode === 201) {
+        setErrorMessage("");
+        nameInput.reset();
+        mobileInput.reset();
+        descriptionInput.reset();
+        emailInput.reset();
+      } else if (error) {
+        const errMsg =
+          error?.response?.data?.statusMessage ||
+          error?.response?.data?.message ||
+          error?.message ||
+          "An error occurred";
+        setErrorMessage(errMsg);
+      } else if (responseData && statusCode) {
+        const errMsg =
+          responseData?.response?.data?.statusMessage ||
+          responseData?.response?.data?.message ||
+          responseData?.message ||
+          "An error occurred";
+        setErrorMessage(errMsg);
       }
     };
 
     Validation();
-  }, [error, responseData]);
+  }, [
+    error,
+    responseData,
+    statusCode,
+    nameInput,
+    mobileInput,
+    descriptionInput,
+    emailInput,
+  ]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -86,13 +101,11 @@ const ContactUsForm = () => {
         description: descriptionInput.value,
       };
 
-      // TODO: REPLACE THIS URL WITH YOUR ACTUAL GOOGLE APPS SCRIPT WEB APP URL
-      const googleScriptUrl = "https://script.google.com/macros/s/AKfycbxzyCCeBTlh_YW236TN9-0B_1QdLV0t7R9zzBYAWFiFO-Rf1gVQQ2Z1dFfUn3yM925r/exec";
+      const googleScriptUrl = "https://script.google.com/macros/s/AKfycbzU5vyXEgJJ53dSHdPX-J1tNC2tgF96y7xlpNlzo3xNq6jRNRjY7rnstEsvy2Gi2ZVUTQ/exec";
 
-      // Send to Google Sheets
       fetch(googleScriptUrl, {
         method: "POST",
-        mode: "no-cors", // Important for Google Apps Script to prevent CORS errors
+        mode: "no-cors", 
         headers: {
           "Content-Type": "application/json",
         },
@@ -109,18 +122,6 @@ const ContactUsForm = () => {
         .catch((error) => {
           setErrorMessage("Failed to send message. Please try again later.");
         });
-
-      // Optional: If you still want to send data to your backend, you can uncomment this:
-      /*
-      sendRequest({
-        url: `${url.backendBaseUrl}/vrpi-user/contact-us`,
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: formData,
-      });
-      */
     } else {
       setErrorMessage("Please fill out all fields correctly");
     }

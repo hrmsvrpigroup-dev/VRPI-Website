@@ -2,7 +2,9 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 const { Pool } = require("pg");
+const { Resend } = require("resend");
 
+const resend = new Resend("re_6AH1yBqC_CjghFhX7LTwC3kcDBQ8ZS1Lw");
 const app = express();
 const PORT = process.env.PORT || 8080;
 
@@ -68,6 +70,9 @@ const initDb = async () => {
         IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='users' AND column_name='profileData') THEN
           ALTER TABLE users ADD COLUMN "profileData" JSONB;
         END IF;
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='users' AND column_name='otp') THEN
+          ALTER TABLE users ADD COLUMN otp VARCHAR(10);
+        END IF;
       END
       $$;
     `);
@@ -94,15 +99,42 @@ const vrpiUserCreateHandler = async (req, res) => {
 
     const selectedRole = role || roles || "student";
     const id = "user_" + Math.random().toString(36).substr(2, 9);
-    const pwd = password || "password123";
+    // Frontend sends createPassword, so we check for it, otherwise fallback to password
+    const pwd = req.body.createPassword || password || "password123";
     const fName = firstName || "";
     const lName = lastName || "";
 
+    // Extract remaining fields to store in profileData
+    const { fathersName, gender, phoneNumber, dateOfBirth, address, occupation, aadharCardNumber } = req.body;
+    const profileData = {
+      fathersName,
+      gender,
+      phoneNumber,
+      dateOfBirth,
+      address,
+      occupation,
+      aadharCardNumber
+    };
+
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
     const insertQuery = `
-      INSERT INTO users (id, email, password, "firstName", "lastName", role, roles, "profileData") 
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *
+      INSERT INTO users (id, email, password, "firstName", "lastName", role, roles, "profileData", otp) 
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *
     `;
-    const result = await pool.query(insertQuery, [id, email.toLowerCase(), pwd, fName, lName, selectedRole, selectedRole, {}]);
+    const result = await pool.query(insertQuery, [id, email.toLowerCase(), pwd, fName, lName, selectedRole, selectedRole, profileData, otp]);
+
+    try {
+      await resend.emails.send({
+        from: 'info@thevrpigroup.com',
+        to: email.toLowerCase(),
+        subject: 'VR PI Group - Verification OTP',
+        html: `<p>Your account verification OTP is: <strong>${otp}</strong></p><p>Please use this OTP to verify your email address. Or you can use this link to verify: <a href="http://localhost:3000/vrpi-user/verify-account/${email.toLowerCase()}/${otp}">Verify Account</a></p>`
+      });
+      console.log(`OTP email sent to ${email}`);
+    } catch (emailError) {
+      console.error("Failed to send OTP email via Resend:", emailError);
+    }
 
     console.log(`Registered user: ${result.rows[0].email} with role ${result.rows[0].role}`);
     return res.status(201).json({
@@ -124,32 +156,21 @@ const vrpiUserLoginHandler = async (req, res) => {
   if (!email) {
     return res.status(400).json({ status: "error", message: "Email is required" });
   }
+  if (!password) {
+    return res.status(400).json({ status: "error", message: "Password is required" });
+  }
 
   try {
     const result = await pool.query('SELECT * FROM users WHERE email = $1', [email.toLowerCase()]);
     
     if (result.rowCount === 0) {
-      // Fallback: if user not found, auto-create a mock user (like the old behavior)
-      const user = {
-        id: "user_mock",
-        email: email.toLowerCase(),
-        firstName: "Test",
-        lastName: "User",
-        role: "student",
-        roles: "student"
-      };
-      console.log(`User logged in (mock): ${user.email}`);
-      return res.status(200).json({
-        status: "success",
-        message: "Login successful (mock)",
-        user: user
-      });
+      return res.status(404).json({ status: "error", message: "User not found" });
     }
 
     const user = result.rows[0];
     
     // Check password
-    if (password && user.password !== password) {
+    if (user.password !== password) {
       return res.status(401).json({ status: "error", message: "Invalid password" });
     }
     
@@ -163,21 +184,8 @@ const vrpiUserLoginHandler = async (req, res) => {
       user: mergedUser
     });
   } catch (error) {
-    console.error("Error logging in, falling back to mock user:", error.message);
-    // Database connection failed (e.g. ENOTFOUND), fallback to mock user so UI still works
-    const mockUser = {
-      id: "user_mock",
-      email: email.toLowerCase(),
-      firstName: "Test",
-      lastName: "User",
-      role: "student",
-      roles: "student"
-    };
-    return res.status(200).json({
-      status: "success",
-      message: "Login successful (fallback)",
-      user: mockUser
-    });
+    console.error("Error logging in:", error.message);
+    return res.status(500).json({ status: "error", message: "Internal server error" });
   }
 };
 app.post("/api/vrpi-user/login", vrpiUserLoginHandler);
@@ -202,16 +210,8 @@ const vrpiUserDetailsHandler = async (req, res) => {
       user: mergedUser
     });
   } catch (error) {
-    console.error("Error fetching user details, falling back to mock user:", error.message);
-    const mockUser = {
-      id: id,
-      email: "student@vrpi.com",
-      firstName: "Student",
-      lastName: "User",
-      role: "student",
-      roles: "student"
-    };
-    return res.status(200).json({ status: "success", user: mockUser });
+    console.error("Error fetching user details:", error.message);
+    return res.status(500).json({ status: "error", message: "Internal server error" });
   }
 };
 app.get("/api/vrpi-user/get-user-details/:id", vrpiUserDetailsHandler);
@@ -254,21 +254,8 @@ const vrpiUserUpdateHandler = async (req, res) => {
       user: mergedUser
     });
   } catch (error) {
-    console.error("Error updating user details, falling back to mock response:", error.message);
-    const mockUpdatedUser = {
-      id: id,
-      email: updateData.email || "student@vrpi.com",
-      firstName: updateData.firstName || "Student",
-      lastName: updateData.lastName || "User",
-      role: "student",
-      roles: "student",
-      ...updateData
-    };
-    return res.status(200).json({
-      status: "success",
-      message: "Profile updated successfully (fallback)",
-      user: mockUpdatedUser
-    });
+    console.error("Error updating user details:", error.message);
+    return res.status(500).json({ status: "error", message: "Internal server error" });
   }
 };
 app.put("/api/vrpi-user/update-user/:id", vrpiUserUpdateHandler);
@@ -285,27 +272,129 @@ app.put("/api/vrpi-user/update-doc/:id", vrpiUserUpdateDocHandler);
 app.put("/vrpi-user/update-doc/:id", vrpiUserUpdateDocHandler);
 
 // 6. Verify account: GET /vrpi-user/verify-account/:email/:otp
-const vrpiUserVerifyHandler = (req, res) => {
-  return res.status(200).json({
-    status: "success",
-    message: "Account verified successfully"
-  });
+const vrpiUserVerifyHandler = async (req, res) => {
+  const { email, otp } = req.params;
+  try {
+    const result = await pool.query('SELECT * FROM users WHERE email = $1 AND otp = $2', [email.toLowerCase(), otp]);
+    if (result.rowCount === 0) {
+      return res.status(400).json({ status: "error", message: "Invalid OTP or User not found" });
+    }
+
+    // Clear the OTP to signify verification is complete
+    await pool.query('UPDATE users SET otp = NULL WHERE email = $1', [email.toLowerCase()]);
+
+    return res.status(200).json({
+      status: "success",
+      message: "Account verified successfully"
+    });
+  } catch (error) {
+    console.error("Error verifying account OTP:", error);
+    return res.status(500).json({ status: "error", message: "Internal server error" });
+  }
 };
 app.get("/api/vrpi-user/verify-account/:email/:otp", vrpiUserVerifyHandler);
 app.get("/vrpi-user/verify-account/:email/:otp", vrpiUserVerifyHandler);
 
 // 7. Forgot password: POST /vrpi-user/forgot-password
-const vrpiUserForgotPasswordHandler = (req, res) => {
-  return res.status(200).json({
-    status: "success",
-    message: "Password reset link sent to your email"
-  });
+const vrpiUserForgotPasswordHandler = async (req, res) => {
+  const { email } = req.body;
+  if (!email) {
+    return res.status(400).json({ status: "error", message: "Email is required" });
+  }
+
+  try {
+    const result = await pool.query('SELECT * FROM users WHERE email = $1', [email.toLowerCase()]);
+    if (result.rowCount === 0) {
+      return res.status(404).json({ status: "error", message: "Email address not found" });
+    }
+
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    await pool.query('UPDATE users SET otp = $1 WHERE email = $2', [otp, email.toLowerCase()]);
+
+    await resend.emails.send({
+      from: 'info@thevrpigroup.com',
+      to: email.toLowerCase(),
+      subject: 'VR PI Group - Password Reset',
+      html: `<p>You have requested to reset your password.</p><p>Please use this link to reset your password: <a href="http://localhost:3000/resetPassword/${email.toLowerCase()}/${otp}">Reset Password</a></p><p>If you did not request this, please ignore this email.</p>`
+    });
+
+    console.log(`Password reset email sent to ${email}`);
+
+    return res.status(200).json({
+      status: "success",
+      message: "Password reset link sent to your email"
+    });
+  } catch (error) {
+    console.error("Error in forgot-password:", error);
+    return res.status(500).json({ status: "error", message: "Internal server error" });
+  }
 };
 app.post("/api/vrpi-user/forgot-password", vrpiUserForgotPasswordHandler);
 app.post("/vrpi-user/forgot-password", vrpiUserForgotPasswordHandler);
 
+// 7.1. Reset password: POST /vrpi-user/reset-password
+const vrpiUserResetPasswordHandler = async (req, res) => {
+  const { email, otp, newPassword } = req.body;
+  if (!email || !otp || !newPassword) {
+    return res.status(400).json({ status: "error", message: "Missing required fields" });
+  }
+
+  try {
+    const result = await pool.query('SELECT * FROM users WHERE email = $1 AND otp = $2', [email.toLowerCase(), otp]);
+    if (result.rowCount === 0) {
+      return res.status(400).json({ status: "error", message: "Invalid or expired reset link" });
+    }
+
+    await pool.query('UPDATE users SET password = $1, otp = NULL WHERE email = $2', [newPassword, email.toLowerCase()]);
+
+    console.log(`Password reset successful for ${email}`);
+
+    return res.status(200).json({
+      status: "success",
+      message: "Password has been successfully reset"
+    });
+  } catch (error) {
+    console.error("Error in reset-password:", error);
+    return res.status(500).json({ status: "error", message: "Internal server error" });
+  }
+};
+app.post("/api/vrpi-user/reset-password", vrpiUserResetPasswordHandler);
+app.post("/vrpi-user/reset-password", vrpiUserResetPasswordHandler);
+
+const { google } = require("googleapis");
+const credentials = require("./credentials.json");
+
 // 8. Contact Us: POST /vrpi-user/contact-us
-const vrpiUserContactUsHandler = (req, res) => {
+const vrpiUserContactUsHandler = async (req, res) => {
+  const { name, email, phone, description } = req.body;
+  const SPREADSHEET_ID = process.env.GOOGLE_SPREADSHEET_ID || process.env.GOOGLE_SHEET_ID;
+
+  if (SPREADSHEET_ID) {
+    try {
+      const auth = new google.auth.GoogleAuth({
+        credentials,
+        scopes: ["https://www.googleapis.com/auth/spreadsheets"],
+      });
+      const sheets = google.sheets({ version: "v4", auth });
+
+      const now = new Date();
+      const date = now.toLocaleDateString('en-IN');
+      const time = now.toLocaleTimeString('en-IN');
+
+      await sheets.spreadsheets.values.append({
+        spreadsheetId: SPREADSHEET_ID,
+        range: "Sheet1!A:F", 
+        valueInputOption: "USER_ENTERED",
+        requestBody: {
+          values: [[date, time, name || "", email || "", phone || "", description || ""]],
+        },
+      });
+      console.log(`Saved Contact Us form for ${email} to Google Sheets`);
+    } catch (error) {
+      console.error("Error saving to Google Sheets:", error);
+    }
+  }
+
   return res.status(200).json({
     status: "success",
     message: "Message received. We will contact you soon."
@@ -377,11 +466,48 @@ app.post(["/api/apply-internship", "/apply-internship"], async (req, res, next) 
         qualification || "", graduationYear || "", resumeLink || "", message || ""
       ]);
       console.log(`Recorded internship application for ${email} - Role: ${internshipRole}`);
+
+      // Google Sheets Integration
+      const INTERNSHIP_SPREADSHEET_ID = process.env.GOOGLE_INTERNSHIP_SPREADSHEET_ID;
+      if (INTERNSHIP_SPREADSHEET_ID) {
+        try {
+          const auth = new google.auth.GoogleAuth({
+            credentials,
+            scopes: ["https://www.googleapis.com/auth/spreadsheets"],
+          });
+          const sheets = google.sheets({ version: "v4", auth });
+
+          const now = new Date();
+          const date = now.toLocaleDateString('en-IN');
+          const time = now.toLocaleTimeString('en-IN');
+
+          await sheets.spreadsheets.values.append({
+            spreadsheetId: INTERNSHIP_SPREADSHEET_ID,
+            range: "Sheet1!A:J", 
+            valueInputOption: "USER_ENTERED",
+            requestBody: {
+              values: [[
+                date, time, name || "", email || "", phone || "", 
+                internshipRole || "", qualification || "", 
+                graduationYear || "", resumeLink || "", message || ""
+              ]],
+            },
+          });
+          console.log(`Saved Internship Application for ${email} to Google Sheets`);
+        } catch (sheetError) {
+          console.error("Error saving internship to Google Sheets:", sheetError);
+        }
+      }
+
     } catch (error) {
       console.error("Error saving internship application:", error);
     }
   }
-  next();
+  
+  return res.status(200).json({
+    status: "success",
+    message: "Internship application submitted successfully!"
+  });
 });
 
 // Endpoint to fetch applied internships

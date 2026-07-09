@@ -4,22 +4,6 @@ import CustomImage from "../../../UI/Image/Image";
 import UserDataComponent from "../../../data/user";
 import { CircularProgress } from "@material-ui/core";
 
-// Example purchases data
-const examplePurchases = [
-  // {
-  //   course: "React Fundamentals",
-  //   joinedOn: "2024-03-10",
-  //   duration: "2 months",
-  //   amountPaid: "3000",
-  // },
-  // {
-  //   course: "JavaScript for Beginners",
-  //   joinedOn: "2024-03-05",
-  //   duration: "1 month",
-  //   amountPaid: "1600",
-  // },
-];
-
 // Purchase item component
 const PurchaseItem = ({ purchase }) => {
   return (
@@ -43,7 +27,7 @@ const PurchaseItem = ({ purchase }) => {
 function PurchaseHistoryComponent() {
   const FetchUserData = UserDataComponent();
 
-  const PurchasesData = FetchUserData.userData.courseList
+  const PurchasesData = FetchUserData.userData?.courseList
     ? FetchUserData.userData?.courseList.map((course) => {
         return {
           course: course.courseName || "No data",

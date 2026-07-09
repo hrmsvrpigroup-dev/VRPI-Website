@@ -116,14 +116,14 @@ import useHttpsAxios from "../hooks/use-httpsAxios";
 // };
 
 import { useDispatch } from "react-redux";
-import { loginWithUserData } from "../store/LoginStateActions";
+import { loginWithUserData, logout } from "../store/LoginStateActions";
 
 const UserDataComponent = (shouldFetch = false) => {
   const userId = useSelector((state) => state.login.userId);
   const reduxUserData = useSelector((state) => state.userData.userData);
   const dispatch = useDispatch();
 
-  const { sendRequest, responseData, statusCode, isLoading, error } =
+  const { sendRequest, responseData, isLoading, error } =
     useHttpsAxios();
 
   useEffect(() => {
@@ -184,6 +184,12 @@ const UserDataComponent = (shouldFetch = false) => {
       dispatch(loginWithUserData(newUserData));
     }
   }, [responseData, dispatch]);
+
+  useEffect(() => {
+    if (error) {
+      dispatch(logout());
+    }
+  }, [error, dispatch]);
 
   const activeUserData = reduxUserData?.user ? reduxUserData : null;
 

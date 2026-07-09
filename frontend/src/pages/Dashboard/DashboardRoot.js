@@ -19,6 +19,13 @@ const DashboardRoot = () => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
+  const { isVRPIUserLoggedIn } = useSelector((state) => state.login);
+
+  useEffect(() => {
+    if (!isVRPIUserLoggedIn) {
+      navigate("/login");
+    }
+  }, [isVRPIUserLoggedIn, navigate]);
 
   const handleLogout = () => {
     setLogoutModalOpen(true);
@@ -75,17 +82,17 @@ const DashboardRoot = () => {
     //   iconInActive: "settings-w.png",
     // },
     {
+      title: "Help & Support",
+      link: "/dashboard/helpAndSupport",
+      iconActive: "support-p.png",
+      iconInActive: "support-w.png",
+    },
+    {
       title: "Logout",
       link: false,
       iconActive: "logout-p.png",
       iconInActive: "logout-w.png",
       action: handleLogout,
-    },
-    {
-      title: "Help & Support",
-      link: "/dashboard/helpAndSupport",
-      iconActive: "support-p.png",
-      iconInActive: "support-w.png",
     },
   ];
 
@@ -95,7 +102,7 @@ const DashboardRoot = () => {
     setShowMenuBar(!showMenuBar);
   };
 
-  const userData = useSelector((state) => state.userData.userData);
+
 
   useEffect(() => {
     const handleScrollLock = () => {
@@ -147,7 +154,7 @@ const DashboardRoot = () => {
         />
       {!FetchUserData.isLoading ? (
         <DashboardOverview
-          userDetails={FetchUserData && FetchUserData.userData.user}
+          userDetails={FetchUserData?.userData?.user}
           toggleMenuBar={toggleMenuBar}
           DashboardLinks={DashboardLinks}
         >

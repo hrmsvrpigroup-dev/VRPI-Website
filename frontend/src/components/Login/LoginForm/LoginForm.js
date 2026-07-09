@@ -107,6 +107,7 @@ const LoginForm = () => {
           onChange: passwordInput.valueChangeHandler,
           type: "password",
           isTouched: passwordInput.isFocused,
+          autoComplete: "new-password",
         }}
         // mandatory="true"
       />
@@ -129,6 +130,7 @@ const LoginForm = () => {
         onChange: emailInput.valueChangeHandler,
         type: "email",
         isTouched: emailInput.isFocused,
+        autoComplete: "off",
       }}
       // mandatory="true"
     />
@@ -195,9 +197,9 @@ const CheckboxSection = ({ setRememberMe, setTermsAccepted }) => (
         />
         <label htmlFor="rememberMe">Remember Me</label>
       </div>
-      {/* <div className={style.forgotPasswordLink}>
-        <NavLink to="/forgetPassword">Forgot password?</NavLink>
-      </div> */}
+      <div className={style.forgotPasswordLink}>
+        <NavLink to="/forgetPassword" style={{color: "#ff6501", textDecoration: "none", fontSize: "0.9rem"}}>Forgot password?</NavLink>
+      </div>
     </div>
     <div className={style.checkboxContainer} style={{ width: "100%" }}>
       <CustomCheckbox

@@ -94,31 +94,24 @@ const EducationalDetailsForm = () => {
     useHttpsAxios();
 
   useEffect(() => {
-    if (formIsValid && (statusCode === 200 || statusCode === 201)) {
+    if (statusCode === 200 || statusCode === 201) {
       SuccessResponseHandler();
-      // console.log(responseData);
-      // setMessageType("success");
-      // setMessage("Uploaded educational details successfully");
-      // navigate("/mandatoryCertificates");
-    } else if (statusCode < 0 && statusCode > 202) {
-      // console.log(error);
-      // console.log(responseData);
-
-      dispatch(setMessage(responseData.response.data.errorMessage, "error"));
+    } else if (error) {
+      const errMsg =
+        error?.response?.data?.errorMessage ||
+        error?.response?.data?.message ||
+        error?.message ||
+        "An error occurred";
+      dispatch(setMessage(errMsg, "error"));
+    } else if (responseData && statusCode && statusCode > 202) {
+      const errMsg =
+        responseData?.response?.data?.errorMessage ||
+        responseData?.response?.data?.message ||
+        responseData?.message ||
+        "An error occurred";
+      dispatch(setMessage(errMsg, "error"));
     }
-    if (error) {
-      // console.log(error);
-      // console.log(responseData);
-      dispatch(
-        setMessage(
-          responseData.response.data
-            ? responseData.response.data.errorMessage
-            : responseData.message,
-          "error"
-        )
-      );
-    }
-  }, [statusCode, responseData]);
+  }, [statusCode, responseData, error, dispatch]);
 
   const submitHandler = () => {
     const educationLevelFinal =
