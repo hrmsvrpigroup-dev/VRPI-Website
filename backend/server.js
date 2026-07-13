@@ -362,7 +362,12 @@ app.post("/api/vrpi-user/reset-password", vrpiUserResetPasswordHandler);
 app.post("/vrpi-user/reset-password", vrpiUserResetPasswordHandler);
 
 const { google } = require("googleapis");
-const credentials = require("./credentials.json");
+let credentials = {};
+try {
+  credentials = require("./credentials.json");
+} catch (error) {
+  console.log("Warning: credentials.json not found. Google Sheets integration may fail.");
+}
 
 // 8. Contact Us: POST /vrpi-user/contact-us
 const vrpiUserContactUsHandler = async (req, res) => {
