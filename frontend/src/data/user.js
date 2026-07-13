@@ -195,7 +195,7 @@ const UserDataComponent = (shouldFetch = false) => {
 
   return {
     userData: activeUserData,
-    isLoading: shouldFetch ? isLoading : !activeUserData,
+    isLoading: shouldFetch ? isLoading : false,
     error: error,
   };
 };

@@ -41,7 +41,7 @@ export const Devops = {
     },
   ],
 
-  actualPrice: "45000",
+  actualPrice: "55000",
 
   discountedPrice: "1770",
   buttonContent: "Enroll Now",
@@ -64,4 +64,18 @@ export const Devops = {
   courseContent: DevopsCourseContent,
 
   syllabus: DevopsSyllabus,
+};
+
+export const DevopsOffline = {
+  ...Devops,
+  id: "8",
+  courseCode: "vprico008",
+  type: "offline",
+  content: [
+    " Scholarship on course fee",
+    "Offline Classes",
+    "Live Practical Training ",
+  ],
+  actualPrice: "150000",
+  discountedPrice: "150000",
 };

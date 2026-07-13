@@ -61,3 +61,17 @@ export const JavaFullStackCourse = {
 
   syllabus: JFSCSyllabus,
 };
+
+export const JavaFullStackCourseOffline = {
+  ...JavaFullStackCourse,
+  id: "7",
+  courseCode: "vprico007",
+  type: "offline",
+  content: [
+    " Scholarship on course fee",
+    "Offline Classes",
+    "Live Practical Training ",
+  ],
+  actualPrice: "150000",
+  discountedPrice: "150000",
+};

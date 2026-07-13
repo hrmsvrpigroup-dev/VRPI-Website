@@ -5,7 +5,7 @@ import { AIToolsAndTechnologyUsed } from "./ToolsAndTechnologyUsed";
 export const AI = {
   id: "5",
   courseCode: "vrpico005",
-  type: "offline",
+  type: "online",
 
   name: "Artificial Intelligence",
   courseLink: "/",
@@ -42,4 +42,18 @@ export const AI = {
   toolsAndTechnologyUsed: AIToolsAndTechnologyUsed,
   courseContent: AICourseContent,
   syllabus: AISyllabus,
+};
+
+export const AIOffline = {
+  ...AI,
+  id: "10",
+  courseCode: "vrpico010",
+  type: "offline",
+  content: [
+    " Scholarship on course fee",
+    "Offline Classes",
+    "Live Practical Training ",
+  ],
+  actualPrice: "200000",
+  discountedPrice: "200000",
 };

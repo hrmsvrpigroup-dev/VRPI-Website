@@ -1,9 +1,11 @@
-import { AI } from "./EdutechCourses/AIData/AI";
-import { Devops } from "./EdutechCourses/DevopsData/Devops";
+import { AIOffline } from "./EdutechCourses/AIData/AI";
+import { Devops, DevopsOffline } from "./EdutechCourses/DevopsData/Devops";
 import { Embedded } from "./EdutechCourses/EmbeddedData/Embedded";
-import { JavaFullStackCourse } from "./EdutechCourses/JavaFullStackData/JavaFullStack";
-import { Python } from "./EdutechCourses/PythonData/Python";
+import { JavaFullStackCourse, JavaFullStackCourseOffline } from "./EdutechCourses/JavaFullStackData/JavaFullStack";
+import { Python, PythonOffline } from "./EdutechCourses/PythonData/Python";
 import { UIUX } from "./EdutechCourses/UIUXData/UIUX";
+import { Cybersecurity } from "./EdutechCourses/CybersecurityData/Cybersecurity";
+import { AgenticAI } from "./EdutechCourses/AgenticAIData/AgenticAI";
 
 const mainContent = {
   head: "For hundreds of succesful students here embrace our new COMMUNITY explore and grow",
@@ -30,7 +32,7 @@ const courseBenefits = [
   "100 % Placement Assistance",
 ];
 
-const Courses = [JavaFullStackCourse, Devops, UIUX, Embedded, AI, Python];
+const Courses = [JavaFullStackCourse, JavaFullStackCourseOffline, Devops, DevopsOffline, UIUX, Cybersecurity, AgenticAI, Embedded, AIOffline, Python, PythonOffline];
 
 export const GetCourseByCourseId = (courseId) => {
   const fetchedCourse = Courses.find(
