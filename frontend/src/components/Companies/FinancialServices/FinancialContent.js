@@ -68,6 +68,16 @@ const services = [
     desc: "Providing insight-driven transformation to investment banks, wealth and asset managers, exchanges, clearing houses.",
   },
   {
+    img: imgStartup,
+    title: "Startup Loans",
+    desc: "Providing insight-driven transformation to investment banks, wealth and asset managers, exchanges, clearing houses.",
+  },
+  {
+    img: imgEducation,
+    title: "Education Loan",
+    desc: "Providing insight-driven transformation to investment banks, wealth and asset managers, exchanges, clearing houses.",
+  },
+  {
     img: imgLifeIns,
     title: "Life Insurance",
     desc: "Providing insight-driven transformation to investment banks, wealth and asset managers, exchanges, clearing houses.",
@@ -90,16 +100,6 @@ const services = [
   {
     img: imgMortgage,
     title: "Mortgage Loans",
-    desc: "Providing insight-driven transformation to investment banks, wealth and asset managers, exchanges, clearing houses.",
-  },
-  {
-    img: imgStartup,
-    title: "Startup Loans",
-    desc: "Providing insight-driven transformation to investment banks, wealth and asset managers, exchanges, clearing houses.",
-  },
-  {
-    img: imgEducation,
-    title: "Education Loan",
     desc: "Providing insight-driven transformation to investment banks, wealth and asset managers, exchanges, clearing houses.",
   },
   {

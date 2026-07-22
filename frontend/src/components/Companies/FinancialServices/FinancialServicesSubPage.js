@@ -11,6 +11,8 @@ import imgVehicleIns    from "../../../assets/financial/svc_vehicle_insurance.pn
 import imgHomeLoans     from "../../../assets/financial/svc_home_loans.png";
 import imgMortgage      from "../../../assets/financial/svc_mortgage_loans.png";
 import imgStartup       from "../../../assets/financial/svc_startup_loans.png";
+import imgStudentLoan   from "../../../assets/financial/svc_student_loan.png";
+import imgEducation     from "../../../assets/financial/svc_education_loan.png";
 import imgCapitalRest   from "../../../assets/financial/svc_capital_restructuring.png";
 import imgTreasuryInst  from "../../../assets/financial/svc_treasury_instructions.png";
 import imgPortfolioMgmt from "../../../assets/financial/svc_portfolio_management.png";
@@ -27,6 +29,21 @@ import {
 
 /* ── Services Cards Data ────────────────────────────────────── */
 const services = [
+  {
+    img: imgStudentLoan,
+    title: "Student Loan",
+    desc: "Providing insight-driven transformation to investment banks, wealth and asset managers, exchanges, clearing houses.",
+  },
+  {
+    img: imgStartup,
+    title: "Startup Loans",
+    desc: "Providing insight-driven transformation to investment banks, wealth and asset managers, exchanges, clearing houses.",
+  },
+  {
+    img: imgEducation,
+    title: "Education Loan",
+    desc: "Providing insight-driven transformation to investment banks, wealth and asset managers, exchanges, clearing houses.",
+  },
   {
     img: imgLifeIns,
     title: "Life Insurance",
@@ -50,11 +67,6 @@ const services = [
   {
     img: imgMortgage,
     title: "Mortgage Loans",
-    desc: "Providing insight-driven transformation to investment banks, wealth and asset managers, exchanges, clearing houses.",
-  },
-  {
-    img: imgStartup,
-    title: "Startup Loans",
     desc: "Providing insight-driven transformation to investment banks, wealth and asset managers, exchanges, clearing houses.",
   },
   {
