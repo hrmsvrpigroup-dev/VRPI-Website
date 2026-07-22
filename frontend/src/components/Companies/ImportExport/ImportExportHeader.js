@@ -48,7 +48,7 @@ const ImportExportHeader = ({ activeTab }) => {
             <a href="https://www.linkedin.com/company/vr-pi-tech-solutions-llp-in/?viewAsMember=true" target="_blank" rel="noopener noreferrer">
               <img src={require("../../../assets/socialMediaIcons/LinkedIn.png")} alt="LinkedIn" />
             </a>
-            <a href="https://msng.link/o?vrpigroup=ig" target="_blank" rel="noopener noreferrer">
+            <a href="https://www.instagram.com/sandeepkumar.pikili/" target="_blank" rel="noopener noreferrer">
               <img src={require("../../../assets/socialMediaIcons/Instagram.png")} alt="Instagram" />
             </a>
           </div>

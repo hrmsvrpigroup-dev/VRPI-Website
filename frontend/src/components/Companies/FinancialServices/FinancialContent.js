@@ -24,6 +24,8 @@ import imgVehicleIns    from "../../../assets/financial/svc_vehicle_insurance.pn
 import imgHomeLoans     from "../../../assets/financial/svc_home_loans.png";
 import imgMortgage      from "../../../assets/financial/svc_mortgage_loans.png";
 import imgStartup       from "../../../assets/financial/svc_startup_loans.png";
+import imgEducation     from "../../../assets/financial/svc_education_loan.png";
+import imgStudentLoan   from "../../../assets/financial/svc_student_loan.png";
 import imgCapitalRest   from "../../../assets/financial/svc_capital_restructuring.png";
 import imgTreasuryInst  from "../../../assets/financial/svc_treasury_instructions.png";
 import imgPortfolioMgmt from "../../../assets/financial/svc_portfolio_management.png";
@@ -61,6 +63,11 @@ const features = [
 /* ── Services Cards Data ────────────────────────────────────── */
 const services = [
   {
+    img: imgStudentLoan,
+    title: "Student Loan",
+    desc: "Providing insight-driven transformation to investment banks, wealth and asset managers, exchanges, clearing houses.",
+  },
+  {
     img: imgLifeIns,
     title: "Life Insurance",
     desc: "Providing insight-driven transformation to investment banks, wealth and asset managers, exchanges, clearing houses.",
@@ -88,6 +95,11 @@ const services = [
   {
     img: imgStartup,
     title: "Startup Loans",
+    desc: "Providing insight-driven transformation to investment banks, wealth and asset managers, exchanges, clearing houses.",
+  },
+  {
+    img: imgEducation,
+    title: "Education Loan",
     desc: "Providing insight-driven transformation to investment banks, wealth and asset managers, exchanges, clearing houses.",
   },
   {
@@ -174,7 +186,7 @@ const FinancialContent = () => {
               <a href="https://www.linkedin.com/company/vr-pi-tech-solutions-llp-in/?viewAsMember=true" target="_blank" rel="noopener noreferrer">
                 <img src={require("../../../assets/socialMediaIcons/LinkedIn.png")} alt="LinkedIn" />
               </a>
-              <a href="https://msng.link/o?vrpigroup=ig" target="_blank" rel="noopener noreferrer">
+              <a href="https://www.instagram.com/sandeepkumar.pikili/" target="_blank" rel="noopener noreferrer">
                 <img src={require("../../../assets/socialMediaIcons/Instagram.png")} alt="Instagram" />
               </a>
             </div>

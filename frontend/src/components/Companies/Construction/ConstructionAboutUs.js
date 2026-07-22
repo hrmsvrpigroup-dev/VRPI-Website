@@ -6,12 +6,6 @@ import logo from "../../../assets/vrpiLogo.png";
 import imgGroup from "../../../assets/companies/construction_about_group.png";
 import joinUsBg from "../../../assets/JoinUsBackground.png";
 
-// Team member image imports
-import imgTeam1 from "../../../assets/aboutus/team1.png";
-import imgTeam2 from "../../../assets/aboutus/team2.png";
-import imgInstructor1 from "../../../assets/Instructor1.png";
-import imgInstructor2 from "../../../assets/Instructor2.png";
-
 // Footer imports
 import Footer from "../../Layout/Footer/Footer";
 import { footerLinks, quickLinks, ContactUs, JoinUsBarData } from "../../../data/NavData";
@@ -23,30 +17,33 @@ import {
   IoLogoLinkedin,
 } from "react-icons/io5";
 
+const getInitials = (name) => {
+  if (!name) return "";
+  const parts = name.trim().split(/\s+/);
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+};
+
 const ConstructionAboutUs = () => {
   const navigate = useNavigate();
 
   const team = [
     {
-      img: imgTeam1,
       name: "Gayatri Meena Kumar",
       role: "Security Manager",
       linkedin: "https://www.linkedin.com/",
     },
     {
-      img: imgInstructor1,
       name: "Gayatri Meena Kumar",
       role: "Security Manager",
       linkedin: "https://www.linkedin.com/",
     },
     {
-      img: imgTeam2,
       name: "Gayatri Meena Kumar",
       role: "Security Manager",
       linkedin: "https://www.linkedin.com/",
     },
     {
-      img: imgInstructor2,
       name: "Gayatri Meena Kumar",
       role: "Security Manager",
       linkedin: "https://www.linkedin.com/",
@@ -144,25 +141,22 @@ const ConstructionAboutUs = () => {
         <div className={style.teamGrid}>
           {team.map((t, idx) => (
             <div className={style.teamCard} key={idx}>
-              <div className={style.teamCardImgWrap}>
-                <img src={t.img} alt={t.name} className={style.teamCardImg} />
-                
-                <div className={style.teamCardOverlay}>
-                  <div className={style.teamCardText}>
-                    <h4 className={style.teamCardName}>{t.name}</h4>
-                    <span className={style.teamCardRole}>{t.role}</span>
-                  </div>
-                  <a
-                    href={t.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={style.linkedinBtn}
-                    aria-label="LinkedIn"
-                  >
-                    <IoLogoLinkedin />
-                  </a>
-                </div>
+              <div className={style.avatarCircle}>
+                {getInitials(t.name)}
               </div>
+              <div className={style.teamCardText}>
+                <h4 className={style.teamCardName}>{t.name}</h4>
+                <span className={style.teamCardRole}>{t.role}</span>
+              </div>
+              <a
+                href={t.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={style.linkedinBtn}
+                aria-label="LinkedIn"
+              >
+                <IoLogoLinkedin />
+              </a>
             </div>
           ))}
         </div>

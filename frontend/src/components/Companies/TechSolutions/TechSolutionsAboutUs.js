@@ -7,10 +7,6 @@ import TechSolutionsHeader from "./TechSolutionsHeader";
 import imgGroup from "../../../assets/companies/construction_about_group.png";
 import joinUsBg from "../../../assets/JoinUsBackground.png";
 
-// Team member image imports
-import imgTeam1 from "../../../assets/aboutus/team1.png";
-import imgTeam2 from "../../../assets/aboutus/team2.png";
-
 // Footer imports
 import Footer from "../../Layout/Footer/Footer";
 import { footerLinks, quickLinks, ContactUs, JoinUsBarData } from "../../../data/NavData";
@@ -18,27 +14,30 @@ import { footerLinks, quickLinks, ContactUs, JoinUsBarData } from "../../../data
 // Icons
 import { IoLogoLinkedin } from "react-icons/io5";
 
+const getInitials = (name) => {
+  if (!name) return "";
+  const parts = name.trim().split(/\s+/);
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+};
+
 const TechSolutionsAboutUs = () => {
   const navigate = useNavigate();
 
   const team = [
     {
-      img: imgTeam1,
       name: "Gayatri Meena Kumar",
       role: "Security Manager",
     },
     {
-      img: imgTeam2,
       name: "Gayatri Meena Kumar",
       role: "Security Manager",
     },
     {
-      img: imgTeam1,
       name: "Gayatri Meena Kumar",
       role: "Security Manager",
     },
     {
-      img: imgTeam2,
       name: "Gayatri Meena Kumar",
       role: "Security Manager",
     },
@@ -130,18 +129,16 @@ const TechSolutionsAboutUs = () => {
         <div className={style.teamGrid}>
           {team.map((member, idx) => (
             <div className={style.teamCard} key={idx}>
-              <div className={style.teamImgWrap}>
-                <img src={member.img} alt={member.name} className={style.teamImg} />
+              <div className={style.avatarCircle}>
+                {getInitials(member.name)}
               </div>
-              <div className={style.teamOverlayInfo}>
-                <div className={style.teamOverlayText}>
-                  <h4 className={style.memberName}>{member.name}</h4>
-                  <p className={style.memberRole}>{member.role}</p>
-                </div>
-                <a href="#" className={style.linkedinBtn}>
-                  <IoLogoLinkedin />
-                </a>
+              <div className={style.teamOverlayText}>
+                <h4 className={style.memberName}>{member.name}</h4>
+                <p className={style.memberRole}>{member.role}</p>
               </div>
+              <a href="#" className={style.linkedinBtn}>
+                <IoLogoLinkedin />
+              </a>
             </div>
           ))}
         </div>
