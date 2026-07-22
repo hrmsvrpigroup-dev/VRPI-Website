@@ -41,6 +41,12 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
           role-session-name: github-actions-role-session
 
+      - name: Create .env.production file
+        run: |
+          cat <<EOF > frontend/.env.production
+          REACT_APP_BACKEND_URL=${{ secrets.REACT_APP_BACKEND_URL }}
+          EOF
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
