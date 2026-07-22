@@ -9,7 +9,12 @@ const app = express();
 const PORT = process.env.PORT || 8080;
 
 // Enable CORS for frontend requests
-app.use(cors());
+app.use(cors({
+  origin: "https://www.thevrpigroup.com",  // your frontend domain
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Origin", "Content-Type", "Accept", "Authorization"]
+}));
 
 // Parse JSON request bodies
 app.use(express.json());
