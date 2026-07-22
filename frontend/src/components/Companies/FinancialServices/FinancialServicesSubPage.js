@@ -163,7 +163,7 @@ const FinancialServicesSubPage = () => {
       <section className={style.servicesSection}>
         <div className={style.servicesHeaderAccent}>
           <span className={style.verticalOrangeLine} />
-          <h2 className={style.accentTitle}>Services We Provide</h2>
+          <h2 className={style.accentTitle}>All Banking Services We Provide</h2>
         </div>
 
         <div className={style.servicesGrid}>

@@ -115,84 +115,7 @@ export const MainDropdownLinks = [
       },
     ],
   },
-  {
-    name: "Banking Services",
-    active: true,
-    content: [
-      {
-        label: "Personal Loan",
-        description: {
-          descriptionHead: "Personal Loan",
-          descriptionContent: "Tailored personal loans to help you achieve your financial goals with flexible repayment options.",
-          link: "/personal-loan",
-          active: true,
-        },
-      },
-      {
-        label: "Home Loan",
-        description: {
-          descriptionHead: "Home Loan",
-          descriptionContent: "Realize your dream of owning a home with our comprehensive and competitive home loan solutions.",
-          link: "/home-loan",
-          active: true,
-        },
-      },
-      {
-        label: "Vehicle Loan",
-        description: {
-          descriptionHead: "Vehicle Loan",
-          descriptionContent: "Drive home your favorite vehicle with our easy and quick vehicle financing options.",
-          link: "/vehicle-loan",
-          active: true,
-        },
-      },
-      {
-        label: "Business Loan",
-        description: {
-          descriptionHead: "Business Loan",
-          descriptionContent: "Empower your business expansion and operational needs with our flexible business loan offerings.",
-          link: "/business-loan",
-          active: true,
-        },
-      },
-      {
-        label: "Gold Loan",
-        description: {
-          descriptionHead: "Gold Loan",
-          descriptionContent: "Unlock the value of your gold instantly with our secure and hassle-free gold loan services.",
-          link: "/gold-loan",
-          active: true,
-        },
-      },
-      {
-        label: "Saving / Current Account",
-        description: {
-          descriptionHead: "Saving / Current Account",
-          descriptionContent: "Manage your day-to-day finances seamlessly with our feature-rich saving and current accounts.",
-          link: "/accounts",
-          active: true,
-        },
-      },
-      {
-        label: "Fixed Deposit",
-        description: {
-          descriptionHead: "Fixed Deposit",
-          descriptionContent: "Grow your wealth securely with our attractive interest rates on fixed deposits.",
-          link: "/fixed-deposit",
-          active: true,
-        },
-      },
-      {
-        label: "Internet Banking",
-        description: {
-          descriptionHead: "Internet Banking",
-          descriptionContent: "Experience the convenience of banking from anywhere, anytime with our secure internet banking platform.",
-          link: "/internet-banking",
-          active: true,
-        },
-      }
-    ],
-  },
+
 
   // { name: "Careers", address: "/careers", active: false },
 
@@ -337,20 +260,7 @@ export const navElementsForMobileData = [
       { name: "Tech Solutions", link: "/tech-solutions", active: true },
     ],
   },
-  {
-    name: "Banking Services",
-    dropdownElement: true,
-    links: [
-      { name: "Personal Loan", link: "/personal-loan", active: true },
-      { name: "Home Loan", link: "/home-loan", active: true },
-      { name: "Vehicle Loan", link: "/vehicle-loan", active: true },
-      { name: "Business Loan", link: "/business-loan", active: true },
-      { name: "Gold Loan", link: "/gold-loan", active: true },
-      { name: "Saving / Current Account", link: "/accounts", active: true },
-      { name: "Fixed Deposit", link: "/fixed-deposit", active: true },
-      { name: "Internet Banking", link: "/internet-banking", active: true },
-    ],
-  },
+
 
   // {
   //   name: "Trust & Welfare",
