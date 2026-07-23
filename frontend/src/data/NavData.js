@@ -7,6 +7,7 @@ export const MainHeaderLinks = [
   // { name: "Careers", address: "/careers", active: true },
   // { name: "KnowledgeHub", address: "/knowledgeHub" },
   { name: "Contact Us", address: "/contact", active: true },
+  { name: "Gallery", address: "/gallery", active: true },
 ];
 
 export const KnowledgeHubHeaderLinks = [
@@ -276,6 +277,12 @@ export const navElementsForMobileData = [
   {
     name: "Contact Us",
     link: "/contact",
+    dropdownElement: false,
+    active: true,
+  },
+  {
+    name: "Gallery",
+    link: "/gallery",
     dropdownElement: false,
     active: true,
   },

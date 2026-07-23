@@ -9,7 +9,7 @@ const Quote = () => {
       ></img>
       <div className={style.cardContent}>
         <h1>
-          Creating a milestones for others is not a easy task, but when you made
+          Creating a milestone for others is not an easy task, but when you made
           it, you will become a role model to others
         </h1>
         <p>-Sandeep Kumar Pikili (Founder of VR Pi Group of Companies)</p>
