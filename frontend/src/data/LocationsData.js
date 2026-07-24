@@ -9,7 +9,7 @@ const LocationData = [
   {
     location: "Hyderabad (India)",
     address:
-      "Plot no. 57, Hitech City Rd, VIP Hills, Jaihind Enclave, Madhapur, Hyderabad, Telangana 500081",
+      "Dwaraka Central , Plot no. 57, Hitech City Rd, VIP Hills, Jaihind Enclave, Madhapur, Hyderabad, Telangana 500081",
     mobile: "+91 8790946714",
     email: "info@vrpigroup.co.in",
   },
